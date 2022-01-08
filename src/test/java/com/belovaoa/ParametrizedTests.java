@@ -1,14 +1,19 @@
 package com.belovaoa;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Selenide.*;
@@ -39,8 +44,23 @@ public class ParametrizedTests {
             delimiter = '|')
     @Tag("Medium")
     @ParameterizedTest(name = "Поиск на https://demoqa.com/books по слову {0} и проверка отображения текста {1}")
-    void commonSearchYaRuTest(String searchQuery, String expectedResult) {
+    void commonSearchDemoqaTest(String searchQuery, String expectedResult) {
         $("#searchBox").setValue(searchQuery).click();
         $$(".rt-tbody").shouldHave(texts(expectedResult));
+    }
+
+    static Stream<Arguments> searchDemoqaMethodSourceTest() {
+        return Stream.of(
+                Arguments.of("java", Arrays.asList("Learning JavaScript Design Patterns")),
+                Arguments.of("git", Arrays.asList("Git Pocket Guide"))
+        );
+    }
+
+    @MethodSource
+    @Tag("Medium")
+    @ParameterizedTest(name = "Поиск на https://demoqa.com/books по слову {0} и проверка отображения текста {1}")
+    void searchDemoqaMethodSourceTest(String searchQuery, List<String> expectedResult) {
+        $("#searchBox").setValue(searchQuery).click();
+        $$(".rt-tbody").shouldHave(texts(expectedResult.get(0)));
     }
 }
