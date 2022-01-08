@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static com.codeborne.selenide.CollectionCondition.texts;
@@ -31,5 +32,15 @@ public class ParametrizedTests {
         $$(".rt-tbody").shouldHave(texts(searchQuery));
     }
 
-
+    @CsvSource(value = {
+            "java| Learning JavaScript Design Patterns",
+            "git| Git Pocket Guide"
+    },
+            delimiter = '|')
+    @Tag("Medium")
+    @ParameterizedTest(name = "Поиск на https://demoqa.com/books по слову {0} и проверка отображения текста {1}")
+    void commonSearchYaRuTest(String searchQuery, String expectedResult) {
+        $("#searchBox").setValue(searchQuery).click();
+        $$(".rt-tbody").shouldHave(texts(expectedResult));
+    }
 }
