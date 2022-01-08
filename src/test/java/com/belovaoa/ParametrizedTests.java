@@ -63,4 +63,6 @@ public class ParametrizedTests {
         $("#searchBox").setValue(searchQuery).click();
         $$(".rt-tbody").shouldHave(texts(expectedResult.get(0)));
     }
+
+
 }
