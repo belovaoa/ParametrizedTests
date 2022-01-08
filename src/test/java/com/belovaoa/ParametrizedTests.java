@@ -3,6 +3,7 @@ package com.belovaoa;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,12 +21,15 @@ public class ParametrizedTests {
         open("https://demoqa.com/books");
     }
 
+    @Disabled
     @ValueSource(strings = {"java", "git"})
     // @DisplayName("Параметризованный тест на поиск на https://demoqa.com/books")
     @Tag("Medium")
-    @ParameterizedTest(name = "Поиск на https://demoqa.com/books {0}")
+    @ParameterizedTest(name = "Поиск на https://demoqa.com/books по слову {0}")
     void parametrizedSearchDemoqaTest(String searchQuery) {
         $("#searchBox").setValue(searchQuery).click();
         $$(".rt-tbody").shouldHave(texts(searchQuery));
     }
+
+
 }

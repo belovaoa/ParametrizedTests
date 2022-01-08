@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static com.codeborne.selenide.Selenide.*;
@@ -31,6 +32,22 @@ public class YatestExampleExerciseTest {
         $("#text").setValue(searchQuery);
         $("button[type='submit']").click();
         $$("li.serp-item").find(Condition.text(searchQuery))
+                .shouldBe(Condition.visible);
+    }
+
+    // На запуск одного теста предоставляется 2 аргумента, 2 стринги и они разделены запятой
+    @CsvSource(value = {
+            "Selenide| лаконичные и стабильные UI тесты на Java",
+            "Allure| Beauty Tips, Trends & Product Reviews"
+    },
+    delimiter = '|')
+    @Tag("BLOCKER")
+    @ParameterizedTest(name = "Поиск на https://yandex.ru/ слова {0} и проверка отображения текста {1}")
+    void commonSearchYaRuTest(String searchQuery, String expectedResult) {
+        open("https://yandex.ru/");
+        $("#text").setValue(searchQuery);
+        $("button[type='submit']").click();
+        $$("li.serp-item").find(Condition.text(expectedResult))
                 .shouldBe(Condition.visible);
     }
 }
