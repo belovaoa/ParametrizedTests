@@ -6,8 +6,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static com.codeborne.selenide.Selenide.*;
 
@@ -80,6 +86,25 @@ public class YatestExampleExerciseTest {
         $("#text").setValue(searchQuery);
         $("button[type='submit']").click();
         $$("li.serp-item").find(Condition.text(expectedResult.name()))
+                .shouldBe(Condition.visible);
+    }
+
+    //Предоставляется специальный метод, который будет возвращать список аргументов любых типов
+    // (самая гибкая возможность написания параметризованных тестов)
+    static Stream<Arguments> любоеНазвание() {
+        return Stream.of(
+                Arguments.of("Selenide", Arrays.asList("лаконичные и стабильные UI тесты на Java")),
+                Arguments.of("Allure", Arrays.asList("Beauty Tips, Trends & Product Reviews"))
+        );
+    }
+    @MethodSource("любоеНазвание")
+    @Tag("BLOCKER")
+    @ParameterizedTest(name = "Поиск на https://yandex.ru/ слова {0} и проверка отображения текста {1}")
+    void commonSearchYaRuTest(String searchQuery, List<String> expectedResult) {
+        open("https://yandex.ru/");
+        $("#text").setValue(searchQuery);
+        $("button[type='submit']").click();
+        $$("li.serp-item").find(Condition.text(expectedResult.get(0)))
                 .shouldBe(Condition.visible);
     }
 }
