@@ -24,6 +24,7 @@ public class ParametrizedTests {
         open("https://demoqa.com/books");
     }
 
+    @Disabled
     @ValueSource(strings = {"java", "git"})
     // @DisplayName("Параметризованный тест на поиск на https://demoqa.com/books")
     @Tag("Medium")
