@@ -19,10 +19,6 @@
 *.tar.gz
 *.rar
 
-# Idea
-.idea
-*.iml
-
 # Gradle
 .gradle
 build
