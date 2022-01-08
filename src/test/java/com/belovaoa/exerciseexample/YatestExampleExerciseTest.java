@@ -1,6 +1,7 @@
 package com.belovaoa.exerciseexample;
 
 import com.codeborne.selenide.Condition;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,22 @@ public class YatestExampleExerciseTest {
         $("#text").setValue(searchQuery);
         $("button[type='submit']").click();
         $$("li.serp-item").find(Condition.text(expectedResult))
+                .shouldBe(Condition.visible);
+    }
+
+    @Disabled
+    @CsvSource(value = {
+            "Selenide| 1",
+            "Allure| 1"
+    },
+            delimiter = '|')
+    @Tag("BLOCKER")
+    @ParameterizedTest(name = "Поиск на https://yandex.ru/ слова {0} и проверка отображения текста {1}")
+    void commonSearchYaRuTest(String searchQuery, int expectedResult) {
+        open("https://yandex.ru/");
+        $("#text").setValue(searchQuery);
+        $("button[type='submit']").click();
+        $$("li.serp-item").find(Condition.text(String.valueOf(expectedResult)))
                 .shouldBe(Condition.visible);
     }
 }
